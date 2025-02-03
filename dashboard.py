@@ -56,7 +56,7 @@ for col in numeric_columns:
 
 #Missing data analysis - all 
 
-df_filt.replace(r'^\s*$', np.nan, regex=True)
+df_filt.replace(r'^\s*$', regex=True)
 fig,ax = plt.subplots(figsize=(10,5))
 msno.matrix(df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
 
