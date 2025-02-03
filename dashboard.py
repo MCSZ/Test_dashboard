@@ -88,7 +88,7 @@ st.pyplot(fig)
 #
 feature_columns = ["metadata:sex", "metadata:species","min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks",  "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
 
-fea_colu = [col in col in feature_columns in col in df.columns]
+fea_colu = [col for col in feature_columns if col in df.columns]
 
 #poss correlation matrix
 correlation_matrix= df[fea_colu + ['metadata:tbi_model_class']].corr()
