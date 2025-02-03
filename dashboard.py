@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 import missingno as msno
+import mpatches
 #https://streamlit.io
 
 # Load spreadsheet with studies
