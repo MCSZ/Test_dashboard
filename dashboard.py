@@ -85,9 +85,7 @@ ax.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.
 st.pyplot(fig)
 
 
-
 feature_columns = ["min_weight", "max_weight", "min_weeks", "max_weeks",  "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)"]
-
 
 
 #table
