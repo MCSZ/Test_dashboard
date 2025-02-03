@@ -32,12 +32,13 @@ df_filt = df[new_columns]
 categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","metadata:tbi_model_class"]
 
 #need to add more columns
-for col in categorical_columns:
+'''for col in categorical_columns:
     if col in df_filt.columns:
         st.subheader(f"Distribution of {col} by TBI class")
         fig, ax = plt.subplots()
         sns.countplot(y=df_filt, x=col, hue="metadata:tbi_model_class", ax=ax)
         st.pyplot(fig)
+'''
 
 # Data Summary
 st.subheader("Numeric Data Summary")
