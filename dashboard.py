@@ -32,16 +32,16 @@ df = df_filt.replace(('No weight reported', 'No age reported', 'No sex reported'
 
 
 
-categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","metadata:tbi_model_class"]
+categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","metadata:tbi_model_class", "metadata:age:category"]
 
 #need to add more columns
-'''for col in categorical_columns:
-    if col in df_filt.columns:
-        st.subheader(f"Distribution of {col} by TBI class")
+for col in categorical_columns:
+    if col in df.columns:
+        st.subheader(f"Distribution of {col}")
         fig, ax = plt.subplots()
         sns.countplot(y=df_filt, x=col, hue="metadata:tbi_model_class", ax=ax)
         st.pyplot(fig)
-'''
+
 
 # Data Summary
 st.subheader("Numeric Data Summary")
@@ -80,8 +80,21 @@ msno.matrix(cci_df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=Fal
 red_patch = mpatches.Patch(color= (0.93, 0.00, 0.37), label='Data present')
 white_patch = mpatches.Patch(color='white', label='Data absent')
 
-st.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.2, 0.7))
+ax.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.2, 0.7))
 
 st.pyplot(fig)
+
+
+#
+fea_colu = ["metadata:sex", "metadata:species","min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks",  "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
+
+#poss correlation matrix
+correlation_matrix= df[fea_colu + ['metadata:tbi_model_class']].corr()
+
+fig,ax = plt.subplots(figsize=(10,5))
+sns.heatmaps(correlation_matrix, annot=True, cmap='coolwarm', ax=ax)
+
+st.pyplot(fig)
+
 
 
