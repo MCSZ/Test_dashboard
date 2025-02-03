@@ -39,7 +39,7 @@ for col in categorical_columns:
     if col in df.columns:
         st.subheader(f"Distribution of {col}")
         fig, ax = plt.subplots()
-        sns.countplot(y=df_filt, x=col, hue="metadata:tbi_model_class", ax=ax)
+        sns.countplot(data=df, x="metadata:tbi_model_class", hue=col, ax=ax)
         st.pyplot(fig)
 
 
