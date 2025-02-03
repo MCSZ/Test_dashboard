@@ -54,25 +54,7 @@ for col in numeric_columns:
     fig, ax = plt.subplots()
     sns.histplot(df[col].dropna(), bins=20, kde=True, ax=ax)
     st.pyplot(fig)
-#look at species
-st.subheader("Variation of C57")
-filtered_species = df[df["metadata:species"].str.contains('C57', case=False, na=False)]
 
-#filtered table
-st.write("Filtered species containing 'C57':")
-st.write(filtered_species[["metadata:species"]])
-
-
-# count the occurrences of each unique value 
-species_counts = filtered_species["metadata:species"].value_counts()
-
-# Display the counts as a table
-st.write("Count of different species variations:")
-st.write(species_counts)
-
-# bar chart to  compare
-st.write("Bar Chart of Species Variations:")
-st.bar_chart(species_counts)
 
 #table
 mod_columns = ["metadata:tbi_model_class", "metadata:tbi_model", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)"]
@@ -111,7 +93,25 @@ st.pyplot(fig)
 
 feature_columns = ["min_weight", "max_weight", "min_weeks", "max_weeks",  "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)"]
 
+#look at species and models
+st.subheader("Variation of C57")
+filtered_species = df[df["metadata:species"].str.contains('C57', case=False, na=False)]
 
+#filtered table
+st.write("Filtered species containing 'C57':")
+st.write(filtered_species[["metadata:species"]])
+
+
+# count the occurrences of each unique value 
+species_counts = filtered_species["metadata:species"].value_counts()
+
+# Display the counts as a table
+st.write("Count of different species variations:")
+st.write(species_counts)
+
+# bar chart to  compare
+st.write("Bar Chart of Species Variations:")
+st.bar_chart(species_counts)
 
 
 
