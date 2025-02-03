@@ -1,4 +1,4 @@
-import pandas as pd
+_import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
@@ -15,10 +15,10 @@ st.title("Dataset Dashboard")
 # Basic Summary
 st.subheader("Dataset Summary")
 st.write({
-    "Total Rows": len(df),
-    "Total Columns": len(df.columns),
-    "Missing Values": df.isnull().sum().sum(),
-    "Columns with Missing Values": df.isnull().sum()[df.isnull().sum() > 0].to_dict()
+    "Total Rows": len(new_df),
+    "Total Columns": len(new_df.columns),
+    "Missing Values": new_df.isnull().sum().sum(),
+    "Columns with Missing Values": new_df.isnull().sum()[new_df.isnull().sum() > 0].to_dict()
 })
 
 # Count values for key categorical columns
