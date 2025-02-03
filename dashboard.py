@@ -16,7 +16,7 @@ st.title("Dataset Dashboard")
 st.subheader("Dataset Summary")
 new_columns = ["metadata:sex", "metadata:species", "metadata:tbi_model", "metadata:tbi_device:type", "metadata:age:category", "min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks", "PMID", "metadata:strain", "metadata:tbi_device", "metadata:tbi_model_class", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
 
-df_filt = df[new_columns]
+df_filt = new_df[new_columns]
 
 st.write({
     "Total Rows": len(df_filt),
@@ -26,7 +26,7 @@ st.write({
 })
 
 # Count values for key categorical columns
-df = new_df.replace(('No weight reported', 'No age reported', 'No sex reported', 'No strain reported', 'No species reported'), value=None)
+df = df_filt.replace(('No weight reported', 'No age reported', 'No sex reported', 'No strain reported', 'No species reported'), value=None)
 
 
 
@@ -43,8 +43,8 @@ categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","m
 
 # Data Summary
 st.subheader("Numeric Data Summary")
-numeric_columns = df_filt.select_dtypes(include=["number"]).columns
-st.write(df_filt[numeric_columns].describe())
+numeric_columns = df.select_dtypes(include=["number"]).columns
+st.write(df[numeric_columns].describe())
 
 # Plot histograms for numerical columns
 for col in numeric_columns:
@@ -58,7 +58,7 @@ for col in numeric_columns:
 
 df_filt.replace(r'^\s*$', np.nan, regex=True)
 fig,ax = plt.subplots(figsize=(10,5))
-msno.matrix(df_filt, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
+msno.matrix(df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
 
 red_patch = mpatches.Patch(color= (0.93, 0.00, 0.37), label='Data present')
 white_patch = mpatches.Patch(color='white', label='Data absent')
@@ -69,7 +69,7 @@ st.pyplot(fig)
 
 
 #Missing data analysis - CCI
-cci_df = df_filt[df_filt["metadata:tbi_model_class"]== "Controlled cortical impact model"]
+cci_df = df[df["metadata:tbi_model_class"]== "Controlled cortical impact model"]
 
 fig,ax = plt.subplots(figsize=(10,5))
 msno.matrix(cci_df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
