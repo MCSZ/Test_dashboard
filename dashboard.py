@@ -58,7 +58,7 @@ for col in numeric_columns:
 #table
 mod_columns = ["metadata:tbi_model_class", "metadata:tbi_model", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)"]
 
-models= df[df[mod_columns]
+models= df[df[mod_columns]]
 st.table(models)
 
 #Missing data analysis - all 
