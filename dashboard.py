@@ -64,7 +64,7 @@ st.write(filtered_species[["metadata:species"]])
 
 
 # count the occurrences of each unique value 
-species_counts = filtered_species[species_column].value_counts()
+species_counts = filtered_species["metadata:species"].value_counts()
 
 # Display the counts as a table
 st.write("Count of different species variations:")
