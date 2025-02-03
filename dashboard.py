@@ -34,7 +34,7 @@ categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","m
 #need to add more columns
 for col in categorical_columns:
     if col in df_filt.columns:
-        st.subheader(f"Distribution of {col}" by TBI class)
+        st.subheader(f"Distribution of {col} by TBI class")
         fig, ax = plt.subplots()
         sns.countplot(y=df_filt, x-col, hue="metadata:tbi_model_class", ax=ax)
         st.pyplot(fig)
