@@ -65,9 +65,10 @@ msno.matrix(df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
 red_patch = mpatches.Patch(color= (0.93, 0.00, 0.37), label='Data present')
 white_patch = mpatches.Patch(color='white', label='Data absent')
 
-st.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.2, 0.7))
+ax.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.2, 0.7))
 
 st.pyplot(fig)
+
 
 
 #Missing data analysis - CCI
@@ -82,3 +83,5 @@ white_patch = mpatches.Patch(color='white', label='Data absent')
 st.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.2, 0.7))
 
 st.pyplot(fig)
+
+
