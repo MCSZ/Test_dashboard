@@ -72,7 +72,11 @@ st.pyplot(fig)
 
 
 #Missing data analysis - CCI
-cci_df = df[df["metadata:tbi_model_class"]== "Controlled cortical impact model"]
+st.subheader("CCI Model Papers - Missing Data Summary")
+cci_df = df["metadata:tbi_model", "metadata:tbi_model_class", "metadata:tbi_device:type", "metadata:tbi_device", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
+
+
+cci_df = cci_df[cci_df["metadata:tbi_model_class"]== "Controlled cortical impact model"]
 
 fig,ax = plt.subplots(figsize=(10,5))
 msno.matrix(cci_df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
