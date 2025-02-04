@@ -16,7 +16,7 @@ st.title("Dataset Dashboard")
 
 # Basic Summary
 st.subheader("Dataset Summary")
-new_columns = ["metadata:sex", "metadata:species", "metadata:tbi_model", "metadata:tbi_device:type", "metadata:age:category", "min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks", "PMID", "metadata:strain", "metadata:tbi_device", "metadata:tbi_model_class", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
+new_columns = ["metadata:sex", "metadata:species", "metadata:tbi_model", "metadata:tbi_device:type", "metadata:age:category", "min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks","metadata:strain", "metadata:tbi_device", "metadata:tbi_model_class", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
 
 df_filt = new_df[new_columns]
 
@@ -73,8 +73,8 @@ st.pyplot(fig)
 
 #Missing data analysis - CCI
 st.subheader("CCI Model Papers - Missing Data Summary")
-cci_newdf = df["metadata:tbi_model", "metadata:tbi_model_class", "metadata:tbi_device:type", "metadata:tbi_device", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
-
+cci_col = ["metadata:tbi_model", "metadata:tbi_model_class", "metadata:tbi_device:type", "metadata:tbi_device", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
+cci_newdf = new_df[cci_col]
 
 cci_df = cci_newdf[cci_newdf["metadata:tbi_model_class"]== "Controlled cortical impact model"]
 
