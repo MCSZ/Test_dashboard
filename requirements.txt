@@ -4,3 +4,6 @@ seaborn
 streamlit
 openpyxl
 missingno
+numpy
+sklearn
+
