@@ -6,4 +6,4 @@ openpyxl
 missingno
 numpy
 sklearn
-
+scikit-learn
