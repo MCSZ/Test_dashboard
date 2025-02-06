@@ -4,18 +4,40 @@ import seaborn as sns
 import streamlit as st
 import missingno as msno
 import matplotlib.patches as mpatches
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
 #https://streamlit.io
 
-# Load spreadsheet with studies
+# Load spreadsheet with studies 
 file_path = "clean_PRECISE_annotations.xlsx"
 new_df = pd.read_excel(file_path, sheet_name='Sheet1')
 
 # Streamlit Dashboard Setup
-st.title("Dataset Dashboard")
+st.title("PRECISE-TBI Metadata Dashboard")
+
+# Split column entries with commas into separate rows
+def split_comma_separated_entries(df, columns):
+    new_rows = []
+    for _, row in df.iterrows():
+        max_splits = max(len(str(row[col]).split(',')) for col in columns)
+        for i in range(max_splits):
+            new_row = row.copy()
+            for col in columns:
+                split_values = str(row[col]).split(',')
+                new_row[col] = split_values[i].strip() if i < len(split_values) else np.nan
+            new_rows.append(new_row)
+    return pd.DataFrame(new_rows)
+
+# Columns to split
+columns_to_split = ["metadata:sex", "metadata:species", "metadata:strain"]
+
+new_df = split_comma_separated_entries(new_df, columns_to_split)
 
 # Basic Summary
-st.subheader("Dataset Summary")
+st.subheader("Metadata Summary")
 new_columns = ["metadata:sex", "metadata:species", "metadata:tbi_model", "metadata:tbi_device:type", "metadata:age:category", "min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks","metadata:strain", "metadata:tbi_device", "metadata:tbi_model_class", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
 
 df_filt = new_df[new_columns]
@@ -27,7 +49,7 @@ st.write({
     "Columns with Missing Values": df_filt.isnull().sum()[df_filt.isnull().sum() > 0].to_dict()
 })
 
-# Count values for key categorical columns
+# Replace some text in missing values to NAN
 df = df_filt.replace(('No weight reported', 'No age reported', 'No sex reported', 'No strain reported', 'No species reported'), value=None)
 
 
@@ -55,6 +77,16 @@ for col in numeric_columns:
     sns.histplot(df[col].dropna(), bins=20, kde=True, ax=ax)
     st.pyplot(fig)
 
+# General Summary
+st.subheader("General Summary")
+general_summary = df.groupby('metadata:tbi_model_class').agg({
+    'min_weeks': ['min', 'max'],
+    'min_weight': ['min', 'max'],
+    'metadata:species': pd.Series.nunique,
+    'metadata:sex': pd.Series.nunique
+}).reset_index()
+general_summary.columns = ['TBI Model Class', 'Min Age (weeks)', 'Max Age (weeks)', 'Min Weight', 'Max Weight', 'Unique Species Count', 'Unique Sex Count']
+st.write(general_summary)
 
 #Missing data analysis - all 
 
@@ -70,6 +102,52 @@ ax.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.
 st.pyplot(fig)
 
 
+# Age Classification Analysis
+st.subheader("Age and Weight Distribution by Sex and Species")
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.scatterplot(data=df, x='min_weeks', y='min_weight', hue='metadata:sex', style='metadata:species', ax=ax)
+ax.set_xlabel('Age (weeks)')
+ax.set_ylabel('Weight')
+st.pyplot(fig)
+
+# Strain Analysis
+st.subheader("Strain Classification Analysis")
+df['strain_prefix'] = df['metadata:strain'].str[:4]
+strain_summary = df.groupby(['strain_prefix', 'metadata:strain_class']).size().reset_index(name='Count')
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.countplot(data=strain_summary, y='strain_prefix', hue='metadata:strain_class', ax=ax)
+ax.set_ylabel('Strain Prefix')
+ax.set_xlabel('Count')
+st.pyplot(fig)
+
+# Model Summary
+st.subheader("Model Summary by Age, Weight, Classification, Species, and Strain")
+model_summary = df.groupby('metadata:tbi_model').agg({
+    'min_weeks': ['min', 'max'],
+    'min_weight': ['min', 'max'],
+    'metadata:sex': pd.Series.nunique,
+    'metadata:species': pd.Series.nunique,
+    'metadata:strain': pd.Series.nunique
+}).reset_index()
+model_summary.columns = ['TBI Model', 'Min Age (weeks)', 'Max Age (weeks)', 'Min Weight', 'Max Weight', 'Unique Sex Count', 'Unique Species Count', 'Unique Strain Count']
+st.write(model_summary)
+
+# Controlled Cortical Impact Model Analysis
+st.subheader("Controlled Cortical Impact Model: Missing Data Analysis on Injury Parameters")
+cci_df = df[df['metadata:tbi_model_class'] == 'controlled cortical impact model']
+injury_params = [
+    "metadata:tbi_device:angle (degrees from vertical)",
+    "metadata:tbi_device:craniectomy_size",
+    "metadata:tbi_device:dural_tears",
+    "metadata:tbi_device:impact_area",
+    "metadata:tbi_device:impact_depth (mm)",
+    "metadata:tbi_device:impact_duration (ms)",
+    "metadata:tbi_device:impact_velocity (m/s)",
+    "metadata:tbi_device:shape"
+]
+fig, ax = plt.subplots(figsize=(10, 5))
+msno.matrix(cci_df[injury_params], ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
+st.pyplot(fig)
 
 #Missing data analysis - CCI
 st.subheader("CCI Model Papers - Missing Data Summary")
@@ -89,6 +167,33 @@ ax.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.
 st.pyplot(fig)
 
 
+# Clustering Analysis
+st.subheader("Clustering Analysis")
+# Select numeric columns for clustering
+numeric_cols = ['min_weeks', 'min_weight']
+clustering_df = df.dropna(subset=numeric_cols)
+X = clustering_df[numeric_cols]
+
+# Standardize the data
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=3, random_state=42)
+clusters = kmeans.fit_predict(X_scaled)
+clustering_df['Cluster'] = clusters
+
+# Visualize clusters using PCA
+pca = PCA(n_components=2)
+pca_components = pca.fit_transform(X_scaled)
+clustering_df['PCA1'] = pca_components[:, 0]
+clustering_df['PCA2'] = pca_components[:, 1]
+
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.scatterplot(data=clustering_df, x='PCA1', y='PCA2', hue='Cluster', style='metadata:species', ax=ax)
+st.pyplot(fig)
+
+
 feature_columns = ["min_weight", "max_weight", "min_weeks", "max_weeks",  "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)"]
 
 
@@ -100,13 +205,6 @@ models= df[mod_columns]
 st.table(models)
 
 
-#look at species and models
-st.subheader("Variation of C57")
-filtered_species = df[df["metadata:species"].str.contains('C57', case=False, na=False)]
-
-#filtered table
-st.write("Filtered species containing 'C57':")
-st.write(filtered_species[["metadata:species"]])
 
 
 # count the occurrences of each unique value 
