@@ -17,7 +17,7 @@ new_df = pd.read_excel(file_path, sheet_name='Sheet1')
 
 # Streamlit Dashboard Setup
 st.title("PRECISE-TBI Metadata Dashboard")
-
+'''
 # Split column entries with commas into separate rows
 def split_comma_separated_entries(df, columns):
     new_rows = []
@@ -35,7 +35,7 @@ def split_comma_separated_entries(df, columns):
 columns_to_split = ["metadata:sex", "metadata:species", "metadata:strain"]
 
 new_df = split_comma_separated_entries(new_df, columns_to_split)
-
+'''
 # Basic Summary
 st.subheader("Metadata Summary")
 new_columns = ["metadata:sex", "metadata:species", "metadata:tbi_model", "metadata:tbi_device:type", "metadata:age:category", "min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks","metadata:strain", "metadata:tbi_device", "metadata:tbi_model_class", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
@@ -166,7 +166,7 @@ ax.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.
 
 st.pyplot(fig)
 
-'''
+
 # Clustering Analysis
 st.subheader("Clustering Analysis")
 # Select numeric columns for clustering
@@ -204,7 +204,6 @@ mod_columns = ["metadata:tbi_model_class", "metadata:tbi_model", "metadata:tbi_d
 models= df[mod_columns]
 st.table(models)
 
-'''
 
 
 # count the occurrences of each unique value 
