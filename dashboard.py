@@ -17,25 +17,7 @@ new_df = pd.read_excel(file_path, sheet_name='Sheet1')
 
 # Streamlit Dashboard Setup
 st.title("PRECISE-TBI Metadata Dashboard")
-'''
-# Split column entries with commas into separate rows
-def split_comma_separated_entries(df, columns):
-    new_rows = []
-    for _, row in df.iterrows():
-        max_splits = max(len(str(row[col]).split(',')) for col in columns)
-        for i in range(max_splits):
-            new_row = row.copy()
-            for col in columns:
-                split_values = str(row[col]).split(',')
-                new_row[col] = split_values[i].strip() if i < len(split_values) else np.nan
-            new_rows.append(new_row)
-    return pd.DataFrame(new_rows)
 
-# Columns to split
-columns_to_split = ["metadata:sex", "metadata:species", "metadata:strain"]
-
-new_df = split_comma_separated_entries(new_df, columns_to_split)
-'''
 # Basic Summary
 st.subheader("Metadata Summary")
 new_columns = ["metadata:sex", "metadata:species", "metadata:tbi_model", "metadata:tbi_device:type", "metadata:age:category", "min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks","metadata:strain", "metadata:tbi_device", "metadata:tbi_model_class", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
