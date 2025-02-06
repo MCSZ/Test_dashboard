@@ -5,9 +5,9 @@ import streamlit as st
 import missingno as msno
 import matplotlib.patches as mpatches
 import numpy as np
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
+#from sklearn.cluster import KMeans
+#from sklearn.preprocessing import StandardScaler
+#from sklearn.decomposition import PCA
 
 #https://streamlit.io
 
@@ -166,7 +166,7 @@ ax.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.
 
 st.pyplot(fig)
 
-
+'''
 # Clustering Analysis
 st.subheader("Clustering Analysis")
 # Select numeric columns for clustering
@@ -204,7 +204,7 @@ mod_columns = ["metadata:tbi_model_class", "metadata:tbi_model", "metadata:tbi_d
 models= df[mod_columns]
 st.table(models)
 
-
+'''
 
 
 # count the occurrences of each unique value 
