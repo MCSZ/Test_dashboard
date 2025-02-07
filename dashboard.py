@@ -53,7 +53,7 @@ general_summary = df.groupby('TBI Model Type').agg({
     'Sex1': pd.Series.nunique,
     'TBI Model': pd.Series.nunique,
 }).reset_index()
-general_summary.columns = ['TBI Model Class', 'TBI Model', 'Age_min(weeks)', 'Age_max(weeks)', 'Weight_min(grams)', 'Weight_max(grams)', 'Unique Species Count', 'Unique Sex Count',''Unique TBI Model Count']
+general_summary.columns = ['TBI Model Class', 'TBI Model', 'Age_min(weeks)', 'Age_max(weeks)', 'Weight_min(grams)', 'Weight_max(grams)', 'Unique Species Count', 'Unique Sex Count','Unique TBI Model Count']
 st.write(general_summary)
 
 #Missing data analysis - all 
