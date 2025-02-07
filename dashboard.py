@@ -36,10 +36,12 @@ columns_to_split = ["metadata:sex", "metadata:species", "metadata:strain"]
 
 def clean_dataframe(df): 
     # Remove duplicate indices 
-    if df.index.duplicated().any(): 
-        df = df[~df.index.duplicated(keep='first')] 
-    if df.columns.duplicated().any(): 
-        df = df.loc[:, ~df.columns.duplicated()] 
+    if df.index.duplicate().any(): 
+        df = df.reset_index(drop=True)
+ 
+    if df.columns.duplicate().any(): 
+        df.columns = pd.io.parsers.ParserBase({'names':df.columns})._maybe_dedup_names(df.columns)
+        
     return df
 
 #Try to split cells with multiple values
