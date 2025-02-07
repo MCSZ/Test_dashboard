@@ -46,7 +46,7 @@ for col in categorical_columns:
 
 # General Summary
 st.subheader("General Summary")
-general_summary = df.groupby('metadata:tbi_model_class').agg({
+general_summary = df.groupby('TBI Model Type').agg({
     'Age (weeks)': ['min', 'max'],
     'Weight (grams)': ['min', 'max'],
     'Species': pd.Series.nunique,
