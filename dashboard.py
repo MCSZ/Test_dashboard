@@ -14,13 +14,14 @@ import numpy as np
 # Load spreadsheet with studies 
 file_path = "ModelCat_paper__020624.xlsx"
 df = pd.read_excel(file_path, sheet_name='Sheet1')
+df['Sex'] = pd.concat([df['Sex1'], df['Sex2']]).reset_index(drop=True)
 
 # Streamlit Dashboard Setup
 st.title("PRECISE-TBI Metadata Dashboard")
 
 # Basic Summary
 st.subheader("Metadata Summary")
-categorical_columns =  ["Sex1", "Sex2", "Species", "Strain Type", "TBI Model Type", "metadata:age:category"]
+categorical_columns =  ["Sex", "Species", "Strain Type", "TBI Model Type", "metadata:age:category"]
 
 
 
@@ -54,7 +55,7 @@ general_summary = df.groupby('TBI Model Type').agg({
     'Weight (grams)': ['min', 'max'],
 }).reset_index()
 
-df['Sex'] = pd.concat([df['Sex1'], df['Sex2']]).reset_index(drop=True)
+
 
 #Species
 species_counts = df.groupby('TBI Model Type')['Species'].nunique().reset_index()
