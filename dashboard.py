@@ -21,6 +21,7 @@ st.title("PRECISE-TBI Metadata Dashboard")
 # Basic Summary
 st.subheader("Metadata Summary")
 new_columns = ["metadata:sex", "metadata:species", "metadata:tbi_model", "metadata:tbi_device:type", "metadata:age:category", "min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks","metadata:strain", "metadata:tbi_device", "metadata:tbi_model_class", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
+categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","metadata:tbi_model_class", "metadata:age:category"]
 
 df_filt = new_df[new_columns]
 
@@ -28,8 +29,18 @@ df_filt = new_df[new_columns]
 # Replace some text in missing values to NAN
 df = df_filt.replace(('No weight reported', 'No age reported', 'No sex reported', 'No strain reported', 'No species reported'), value=None)
 
+
+
 # Columns to split
 columns_to_split = ["metadata:sex", "metadata:species", "metadata:strain"]
+
+def clean_dataframe(df): 
+    # Remove duplicate indices 
+    if df.index.duplicated().any(): 
+        df = df[~df.index.duplicated(keep='first')] 
+    if df.columns.duplicated().any(): 
+        df = df.loc[:, ~df.columns.duplicated()] 
+    return df
 
 #Try to split cells with multiple values
 def split_rows(df, col_to_split):
@@ -47,10 +58,10 @@ def split_rows(df, col_to_split):
     return pd.DataFrame(new_rows)
 
 
+df = clean_dataframe(df)
+
 df = split_rows(df, columns_to_split)
 
-
-categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","metadata:tbi_model_class", "metadata:age:category"]
 
 
 # Header
