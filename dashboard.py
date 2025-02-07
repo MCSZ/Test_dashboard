@@ -13,7 +13,7 @@ import numpy as np
 
 # Load spreadsheet with studies 
 file_path = "ModelCat_paper__020624.xlsx"
-df = pd.read_excel(file_path, sheet_name='Sheet1')
+new_df = pd.read_excel(file_path, sheet_name='Sheet1')
 
 # Streamlit Dashboard Setup
 st.title("PRECISE-TBI Metadata Dashboard")
@@ -22,6 +22,36 @@ st.title("PRECISE-TBI Metadata Dashboard")
 st.subheader("Metadata Summary")
 categorical_columns =  ["Sex1", "Sex2", "Species", "Strain", "Strain Type", "TBI Model Type", "TBI Model", "metadata:age:category"]
 
+# Merging columns and creating duplicate rows
+def merge_and_duplicate(df, col1, col2):
+    # Create a copy of the dataframe
+    df_copy = df.copy()
+
+    # Create the merged column (concatenate col1 and col2, handling missing values)
+    df_copy['Merged Values'] = df_copy[col1].fillna('') + df_copy[col2].fillna('')
+
+    # Create the new dataframe with duplicate rows:
+    # - One row for each unique value from col1
+    # - One row for each unique value from col2
+    df_merged = pd.concat([
+        df_copy[[col1, 'New value', 'Another value', 'Merged Values']].rename(columns={col1: 'Value1'}),
+        df_copy[[col2, 'New value', 'Another value', 'Merged Values']].rename(columns={col2: 'Value1'})
+    ], ignore_index=True)
+
+    # Remove any unnecessary columns
+    df_merged = df_merged.drop([col1, col2], axis=1)
+
+    # Reorder columns to match original order
+    df_merged = df_merged[['ID', 'Value1', 'New value', 'Another value', 'Merged Values']]
+
+    return df_merged
+
+# Merge columns and duplicate rows
+df = merge_and_duplicate(new_df, 'Sex1', 'Sex2')
+
+# Display resulting DataFrame
+st.subheader("Data with Merged Values and Duplicated Rows")
+st.dataframe(merged_df)
 
 # Header
 st.subheader("Summary Preview")
