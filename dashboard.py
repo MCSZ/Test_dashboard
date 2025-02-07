@@ -12,7 +12,7 @@ import numpy as np
 #https://streamlit.io
 
 # Load spreadsheet with studies 
-file_path = "clean_PRECISE_annotations.xlsx"
+file_path = "PRECISE-TBI Model Catalog-450-results (1).xlsx"
 df = pd.read_excel(file_path, sheet_name='Sheet1')
 
 # Streamlit Dashboard Setup
