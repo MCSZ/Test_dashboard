@@ -70,12 +70,7 @@ st.subheader("Numeric Data Summary")
 numeric_columns = df.select_dtypes(include=["number"]).columns
 st.write(df[numeric_columns].describe())
 
-# Plot histograms for numerical columns
-for col in numeric_columns:
-    st.subheader(f"Distribution of {col}")
-    fig, ax = plt.subplots()
-    sns.histplot(df[col].dropna(), bins=20, kde=True, ax=ax)
-    st.pyplot(fig)
+
 
 # General Summary
 st.subheader("General Summary")
@@ -196,13 +191,6 @@ st.pyplot(fig)
 
 feature_columns = ["min_weight", "max_weight", "min_weeks", "max_weeks",  "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)"]
 
-
-
-#table
-mod_columns = ["metadata:tbi_model_class", "metadata:tbi_model", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)"]
-
-models= df[mod_columns]
-st.table(models)
 
 
 
