@@ -31,41 +31,6 @@ df = df_filt.replace(('No weight reported', 'No age reported', 'No sex reported'
 
 
 
-# Columns to split
-columns_to_split = ["metadata:sex", "metadata:species", "metadata:strain"]
-
-def clean_dataframe(df): 
-    # Remove duplicate indices 
-    if df.index.duplicate().any(): 
-        df = df.reset_index(drop=True)
- 
-    if df.columns.duplicate().any(): 
-        df.columns = pd.io.parsers.ParserBase({'names':df.columns})._maybe_dedup_names(df.columns)
-        
-    return df
-
-#Try to split cells with multiple values
-def split_rows(df, col_to_split):
-    # Create a new DataFrame to store the split rows
-    new_rows = []
-    for _, row in df.iterrows():
-        # Split the values in the specified columns
-        split_values = {col: row[col].split(',') if pd.notna(row[col]) else [] for col in columns_to_split}
-        max_splits = max(len(values) for values in split_values.values())
-        for i in range(max_splits):
-            new_row = row.copy()
-            for col, values in split_values.items():
-                new_row[col] = values[i].strip() if i < len(values) else np.nan
-            new_rows.append(new_row)
-    return pd.DataFrame(new_rows)
-
-
-df = clean_dataframe(df)
-
-df = split_rows(df, columns_to_split)
-
-
-
 # Header
 st.subheader("Summary Preview")
 st.dataframe(df_filt.head())
