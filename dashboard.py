@@ -20,7 +20,7 @@ st.title("PRECISE-TBI Metadata Dashboard")
 
 # Basic Summary
 st.subheader("Metadata Summary")
-categorical_columns =  ["Sex1", "Species", "Strain Type", "TBI Model Type", "metadata:age:category"]
+categorical_columns =  ["Sex1", "Sex2", "Species", "Strain Type", "TBI Model Type", "metadata:age:category"]
 
 
 
@@ -48,6 +48,7 @@ for col in categorical_columns:
 # General Summary
 st.subheader("General Summary")
 df=df.dropna(subset=['TBI Model Type'])
+
 general_summary = df.groupby('TBI Model Type').agg({
     'Age (weeks)': ['min', 'max'],
     'Weight (grams)': ['min', 'max'],
@@ -57,20 +58,20 @@ df['Sex'] = pd.concat([df['Sex1'], df['Sex2']]).reset_index(drop=True)
 
 #Species
 species_counts = df.groupby('TBI Model Type')['Species'].nunique().reset_index()
-species_counts.rename(columns={'Sex': 'Unique Species Count'}, inplace=True) 
+species_counts.rename(columns={'Species': 'Unique Species Count'}, inplace=True) 
 
 #Sex
 sex_counts = df.groupby('TBI Model Type')['Sex'].nunique().reset_index()
-sex_counts.rename= df.groupby('TBI Model Type')['Species'], inplace=True)
+sex_counts.rename(columns={'Sex': 'Unique Sex Count'}, inplace=True) 
 
 #Model
 tbi_model_counts = df.groupby('TBI Model Type')['TBI Model'].nunique().reset_index()
-tbi_model_counts.rename(columns={'Sex': 'Investigator Named TBI Model Count'}, inplace=True) 
+tbi_model_counts.rename(columns={'TBI Model': 'Investigator Named TBI Model Count'}, inplace=True) 
 
 #Merge all counts
 general_summary = pd.merge(general_summary, species_counts, on='TBI Model Type', how='left')
-general_summary = pd.merge(general_summary, species_counts, on='TBI Model Type', how='left')
-general_summary = pd.merge(general_summary, species_counts, on='TBI Model Type', how='left')
+general_summary = pd.merge(general_summary, sex_counts, on='TBI Model Type', how='left')
+general_summary = pd.merge(general_summary, tbi_model_counts, on='TBI Model Type', how='left')
                            
 
 st.write(general_summary)
