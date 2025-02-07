@@ -24,38 +24,33 @@ new_columns = ["metadata:sex", "metadata:species", "metadata:tbi_model", "metada
 
 df_filt = new_df[new_columns]
 
+
+# Replace some text in missing values to NAN
+df = df_filt.replace(('No weight reported', 'No age reported', 'No sex reported', 'No strain reported', 'No species reported'), value=None)
+
+# Columns to split
+columns_to_split = ["metadata:sex", "metadata:species", "metadata:strain"]
+
+for col in columns_to_split:
+    if col in df.columns:
+        df[col]=df[col].str.split(',')
+        df = df.explode(col)
+
+
+categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","metadata:tbi_model_class", "metadata:age:category"]
+
+
+# Header
+st.subheader("Summary Preview")
+st.dataframe(df_filt.head())
+
 st.write({
     "Total Rows": len(df_filt),
     "Total Columns": len(df_filt.columns),
     "Missing Values": df_filt.isnull().sum().sum(),
     "Columns with Missing Values": df_filt.isnull().sum()[df_filt.isnull().sum() > 0].to_dict()
 })
-
-# Split column entries with commas into separate rows
-def split_comma_separated_entries(df, columns):
-    new_rows = []
-    for _, row in df.iterrows():
-        max_splits = max(len(str(row[col]).split(',')) for col in columns)
-        for i in range(max_splits):
-            new_row = row.copy()
-            for col in columns:
-                split_values = str(row[col]).split(',')
-                new_row[col] = split_values[i].strip() if i < len(split_values) else np.nan
-            new_rows.append(new_row)
-    return pd.DataFrame(new_rows)
-
-# Columns to split
-columns_to_split = ["metadata:sex", "metadata:species", "metadata:strain"]
-
-new_df = split_comma_separated_entries(new_df, columns_to_split)
-
-# Replace some text in missing values to NAN
-df = df_filt.replace(('No weight reported', 'No age reported', 'No sex reported', 'No strain reported', 'No species reported'), value=None)
-
-
-
-categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","metadata:tbi_model_class", "metadata:age:category"]
-
+    
 #need to add more columns
 for col in categorical_columns:
     if col in df.columns:
@@ -63,12 +58,6 @@ for col in categorical_columns:
         fig, ax = plt.subplots()
         sns.countplot(data=df, y="metadata:tbi_model_class", hue=col, ax=ax)
         st.pyplot(fig)
-
-
-# Data Summary
-st.subheader("Numeric Data Summary")
-numeric_columns = df.select_dtypes(include=["number"]).columns
-st.write(df[numeric_columns].describe())
 
 
 
