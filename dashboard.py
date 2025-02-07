@@ -20,7 +20,7 @@ st.title("PRECISE-TBI Metadata Dashboard")
 
 # Basic Summary
 st.subheader("Metadata Summary")
-categorical_columns =  ["Sex1", "Species", "Strain", "Strain Type", "TBI Model Type", "TBI Model", "metadata:age:category"]
+categorical_columns =  ["Sex1", "Species", "Strain Type", "TBI Model Type", "metadata:age:category"]
 
 
 
