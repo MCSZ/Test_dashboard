@@ -13,33 +13,25 @@ import numpy as np
 
 # Load spreadsheet with studies 
 file_path = "clean_PRECISE_annotations.xlsx"
-new_df = pd.read_excel(file_path, sheet_name='Sheet1')
+df = pd.read_excel(file_path, sheet_name='Sheet1')
 
 # Streamlit Dashboard Setup
 st.title("PRECISE-TBI Metadata Dashboard")
 
 # Basic Summary
 st.subheader("Metadata Summary")
-new_columns = ["metadata:sex", "metadata:species", "metadata:tbi_model", "metadata:tbi_device:type", "metadata:age:category", "min_weight", "max_weight", "units_weight", "min_weeks", "max_weeks","metadata:strain", "metadata:tbi_device", "metadata:tbi_model_class", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
-categorical_columns =  ["metadata:sex", "metadata:species", "metadata:strain","metadata:tbi_model_class", "metadata:age:category"]
-
-df_filt = new_df[new_columns]
-
-
-# Replace some text in missing values to NAN
-df = df_filt.replace(('No weight reported', 'No age reported', 'No sex reported', 'No strain reported', 'No species reported'), value=None)
-
+categorical_columns =  ["Sex1", "Sex2", "Species", "Strain", "Strain Type", "TBI Model Type", "TBI Model", "metadata:age:category"]
 
 
 # Header
 st.subheader("Summary Preview")
-st.dataframe(df_filt.head())
+st.dataframe(df.head())
 
 st.write({
-    "Total Rows": len(df_filt),
-    "Total Columns": len(df_filt.columns),
-    "Missing Values": df_filt.isnull().sum().sum(),
-    "Columns with Missing Values": df_filt.isnull().sum()[df_filt.isnull().sum() > 0].to_dict()
+    "Total Rows": len(df),
+    "Total Columns": len(df.columns),
+    "Missing Values": df.isnull().sum().sum(),
+    "Columns with Missing Values": df.isnull().sum()[df.isnull().sum() > 0].to_dict()
 })
     
 #need to add more columns
@@ -47,7 +39,7 @@ for col in categorical_columns:
     if col in df.columns:
         st.subheader(f"Distribution of {col}")
         fig, ax = plt.subplots()
-        sns.countplot(data=df, y="metadata:tbi_model_class", hue=col, ax=ax)
+        sns.countplot(data=df, y="TBI Model Type", hue=col, ax=ax)
         st.pyplot(fig)
 
 
@@ -55,12 +47,13 @@ for col in categorical_columns:
 # General Summary
 st.subheader("General Summary")
 general_summary = df.groupby('metadata:tbi_model_class').agg({
-    'min_weeks': ['min', 'max'],
-    'min_weight': ['min', 'max'],
-    'metadata:species': pd.Series.nunique,
-    'metadata:sex': pd.Series.nunique
+    'Age (weeks)': ['min', 'max'],
+    'Weight (grams)': ['min', 'max'],
+    'Species': pd.Series.nunique,
+    'Sex1': pd.Series.nunique,
+    'TBI Model': pd.Series.nunique,
 }).reset_index()
-general_summary.columns = ['TBI Model Class', 'Min Age (weeks)', 'Max Age (weeks)', 'Min Weight', 'Max Weight', 'Unique Species Count', 'Unique Sex Count']
+general_summary.columns = ['TBI Model Class', 'TBI Model', 'Age_min(weeks)', 'Age_max(weeks)', 'Weight_min(grams)', 'Weight_max(grams)', 'Unique Species Count', 'Unique Sex Count',''Unique TBI Model Count']
 st.write(general_summary)
 
 #Missing data analysis - all 
@@ -87,10 +80,10 @@ st.pyplot(fig)
 
 # Strain Analysis
 st.subheader("Strain Classification Analysis")
-df['strain_prefix'] = df['metadata:strain'].str[:4]
-strain_summary = df.groupby(['strain_prefix', 'metadata:strain_class']).size().reset_index(name='Count')
+df['strain_prefix'] = df['Strain'].str[:4]
+strain_summary = df.groupby(['strain_prefix', 'Strain']).size().reset_index(name='Count')
 fig, ax = plt.subplots(figsize=(10, 6))
-sns.countplot(data=strain_summary, y='strain_prefix', hue='metadata:strain_class', ax=ax)
+sns.countplot(data=strain_summary, y='strain_prefix', hue='Strain', ax=ax)
 ax.set_ylabel('Strain Prefix')
 ax.set_xlabel('Count')
 st.pyplot(fig)
