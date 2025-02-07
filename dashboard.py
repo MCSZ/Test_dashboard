@@ -56,7 +56,10 @@ general_summary = df.groupby('TBI Model Type').agg({
 df['Sex'] = pd.concat([df['Sex1'], df['Sex2']]).reset_index(drop=True)
 
 general_summary['Unique Species Count'] = df.groupby('TBI Model Type')['Species'].nunique().reset_index(drop=True)
-general_summary['Unique Sex Count'] = df.groupby('TBI Model Type')['Sex'].nunique().reset_index(drop=True)
+
+general_summary = df.groupby('TBI Model Type')['Sex'].nunique().reset_index(drop=True)
+general_summary.rename(columns={'Sex': 'Unique Sex Count'}, inplace=True) 
+
 general_summary['Unique TBI Model Count'] = df.groupby('TBI Model Type')['TBI Model'].nunique().reset_index(drop=True)
 
 st.write(general_summary)
