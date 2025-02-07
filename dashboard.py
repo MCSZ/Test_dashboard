@@ -31,6 +31,24 @@ st.write({
     "Columns with Missing Values": df_filt.isnull().sum()[df_filt.isnull().sum() > 0].to_dict()
 })
 
+# Split column entries with commas into separate rows
+def split_comma_separated_entries(df, columns):
+    new_rows = []
+    for _, row in df.iterrows():
+        max_splits = max(len(str(row[col]).split(',')) for col in columns)
+        for i in range(max_splits):
+            new_row = row.copy()
+            for col in columns:
+                split_values = str(row[col]).split(',')
+                new_row[col] = split_values[i].strip() if i < len(split_values) else np.nan
+            new_rows.append(new_row)
+    return pd.DataFrame(new_rows)
+
+# Columns to split
+columns_to_split = ["metadata:sex", "metadata:species", "metadata:strain"]
+
+new_df = split_comma_separated_entries(new_df, columns_to_split)
+
 # Replace some text in missing values to NAN
 df = df_filt.replace(('No weight reported', 'No age reported', 'No sex reported', 'No strain reported', 'No species reported'), value=None)
 
