@@ -62,7 +62,7 @@ if 'Age (weeks)' in df.columns and 'Weight (grams)' in df.columns:
     }).reset_index()
     general_summary.columns = ['TBI Model Type', 'Min Age (weeks)', 'Max Age (weeks)', 'Min Weight', 'Max Weight']
 else:
-    continue
+    return
 
 
 #Species
@@ -71,7 +71,7 @@ if 'Species' in df.columns:
     species_counts.rename(columns={'Species': 'Unique Species Count'}, inplace=True) 
     general_summary = pd.merge(general_summary, species_counts, on='TBI Model Type', how='left')
 else:
-    continue
+    return
 
 #Sex
 if 'Sex' in df.columns:
@@ -79,7 +79,7 @@ if 'Sex' in df.columns:
     sex_counts.rename(columns={'Sex': 'Unique Sex Count'}, inplace=True) 
     general_summary = pd.merge(general_summary, sex_counts, on='TBI Model Type', how='left')
 else:
-    continue
+    return
 
 #Model
 if 'TBI Model' in df.columns:
@@ -87,7 +87,7 @@ if 'TBI Model' in df.columns:
     tbi_model_counts.rename(columns={'TBI Model': 'Investigator Named TBI Model Count'}, inplace=True)
     general_summary = pd.merge(general_summary, tbi_model_counts, on='TBI Model Type', how='left')
 else:
-    continue
+    return
 
 
 
