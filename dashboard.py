@@ -50,29 +50,47 @@ for col in categorical_columns:
 st.subheader("General Summary")
 df=df.dropna(subset=['TBI Model Type'])
 
-general_summary = df.groupby('TBI Model Type').agg({
-    'Age (weeks)': ['min', 'max'],
-    'Weight (grams)': ['min', 'max'],
-}).reset_index()
+#
+if 'Age (weeks)' in df.columns and 'Weight (grams)' in df.columns:
+    # Handle missing values in numeric columns
+    df['Age (weeks)'] = pd.to_numeric(df['Age (weeks)'], errors='coerce')
+    df['Weight (grams)'] = pd.to_numeric(df['Weight (grams)'], errors='coerce')
+
+    general_summary = df.groupby('TBI Model Type').agg({
+        'Age (weeks)': ['min', 'max'],
+        'Weight (grams)': ['min', 'max'],
+    }).reset_index()
+   general_summary.columns = ['TBI Model Type', 'Min Age (weeks)', 'Max Age (weeks)', 'Min Weight', 'Max Weight']
+else:
+    continue
+
 
 
 
 #Species
-species_counts = df.groupby('TBI Model Type')['Species'].nunique().reset_index()
-species_counts.rename(columns={'Species': 'Unique Species Count'}, inplace=True) 
+if 'Species' in df.columns:
+    species_counts = df.groupby('TBI Model Type')['Species'].nunique().reset_index()
+    species_counts.rename(columns={'Species': 'Unique Species Count'}, inplace=True) 
+    general_summary = pd.merge(general_summary, species_counts, on='TBI Model Type', how='left')
 
 #Sex
-sex_counts = df.groupby('TBI Model Type')['Sex'].nunique().reset_index()
-sex_counts.rename(columns={'Sex': 'Unique Sex Count'}, inplace=True) 
+if 'Sex' in df.columns::
+    sex_counts = df.groupby('TBI Model Type')['Sex'].nunique().reset_index()
+    sex_counts.rename(columns={'Sex': 'Unique Sex Count'}, inplace=True) 
+    general_summary = pd.merge(general_summary, sex_counts, on='TBI Model Type', how='left')
+else:
+    continue
 
 #Model
-tbi_model_counts = df.groupby('TBI Model Type')['TBI Model'].nunique().reset_index()
-tbi_model_counts.rename(columns={'TBI Model': 'Investigator Named TBI Model Count'}, inplace=True) 
+if 'TBI Model' in df.columns:
+    tbi_model_counts = df.groupby('TBI Model Type')['TBI Model'].nunique().reset_index()
+    tbi_model_counts.rename(columns={'TBI Model': 'Investigator Named TBI Model Count'}, inplace=True)
+    general_summary = pd.merge(general_summary, tbi_model_counts, on='TBI Model Type', how='left')
+else:
+    continue
 
-#Merge all counts
-general_summary = pd.merge(general_summary, species_counts, on='TBI Model Type', how='left')
-general_summary = pd.merge(general_summary, sex_counts, on='TBI Model Type', how='left')
-general_summary = pd.merge(general_summary, tbi_model_counts, on='TBI Model Type', how='left')
+
+
                            
 
 st.write(general_summary)
