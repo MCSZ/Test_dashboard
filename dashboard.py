@@ -74,7 +74,7 @@ else:
     continue
 
 #Sex
-if 'Sex' in df.columns::
+if 'Sex' in df.columns:
     sex_counts = df.groupby('TBI Model Type')['Sex'].nunique().reset_index()
     sex_counts.rename(columns={'Sex': 'Unique Sex Count'}, inplace=True) 
     general_summary = pd.merge(general_summary, sex_counts, on='TBI Model Type', how='left')
