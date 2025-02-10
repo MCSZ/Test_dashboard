@@ -44,7 +44,26 @@ for col in categorical_columns:
         sns.countplot(data=df, y="TBI Model Type", hue=col, ax=ax)
         st.pyplot(fig)
 
+# Ensure the DataFrame contains the necessary columns
+required_columns = ["Species", "Strain Type"]
 
+if not all(col in df.columns for col in required_columns):
+    st.error(f{required_columns}")
+else:
+    # Drop rows with missing values in the required columns
+    df = df.dropna(subset=required_columns)
+
+    # Get unique species
+    species_list = df["metadata:species"].unique()
+
+    # Iterate over each species and plot the distribution of strains
+    for species in species_list:
+        st.subheader(f"Distribution of strains for species: {species}")
+        species_df = df[df["metadata:species"] == species]
+        fig, ax = plt.subplots()
+        sns.countplot(y=species_df["metadata:strain"], order=species_df["metadata:strain"].value_counts().index, ax=ax)
+        ax.set_title(f"Strain Distribution for {species}")
+        st.pyplot(fig)
 
 # General Summary
 st.subheader("General Summary")
