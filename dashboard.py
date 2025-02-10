@@ -51,49 +51,39 @@ st.subheader("General Summary")
 df=df.dropna(subset=['TBI Model Type'])
 
 #
-if 'Age (weeks)' in df.columns and 'Weight (grams)' in df.columns:
-    # Handle missing values in numeric columns
-    df['Age (weeks)'] = pd.to_numeric(df['Age (weeks)'], errors='coerce')
-    df['Weight (grams)'] = pd.to_numeric(df['Weight (grams)'], errors='coerce')
-
-    general_summary = df.groupby('TBI Model Type').agg({
-        'Age (weeks)': ['min', 'max'],
-        'Weight (grams)': ['min', 'max'],
-    }).reset_index()
-    general_summary.columns = ['TBI Model Type', 'Min Age (weeks)', 'Max Age (weeks)', 'Min Weight', 'Max Weight']
-else:
-    st.warning("Age (weeks)' or 'Weight (grams) entry missing")
+col_gensum = ['Age_min(weeks)','Age_max(weeks)','Weight_min(grams)','Weight_max(grams)', 'Species', 'Sex','TBI Model']
 
 
-#Species
-if 'Species' in df.columns:
-    species_counts = df.groupby('TBI Model Type')['Species'].nunique().reset_index()
-    species_counts.rename(columns={'Species': 'Unique Species Count'}, inplace=True) 
-    general_summary = pd.merge(general_summary, species_counts, on='TBI Model Type', how='left')
-else:
-    st.warning("Species entry missing")
+def summarize_column(df, group_column, col):
+    if col in df.columns:
+        
+        # is numeric,?
+        if pd.api.types.is_numeric_dtype(df[col]):  # Check if the column is already numeric
+            # For numeric columns, get the min and max
+            col_counts = df.groupby(group_column)[col].agg(['min', 'max']).reset_index()
+            col_counts.rename(columns={f'{col}': f'{col} min', f'{col}': f'{col} max'}, inplace=True)
+        else:
+            # text columns, count unique values
+            col_counts = df.groupby(group_column)[col].nunique().reset_index()
+            col_counts.rename(columns={col: f'Unique {col} Count'}, inplace=True)
+        
+        # Merge the result into the general summary
+        general_summary = pd.merge(df[[group_column]].drop_duplicates(), COL_counts, on=group_column, how='left')
+        return general_summary
+    else:
+        raise ValueError(f"{col} does not exist in the DataFrame.")
 
-#Sex
-if 'Sex' in df.columns:
-    sex_counts = df.groupby('TBI Model Type')['Sex'].nunique().reset_index()
-    sex_counts.rename(columns={'Sex': 'Unique Sex Count'}, inplace=True) 
-    general_summary = pd.merge(general_summary, sex_counts, on='TBI Model Type', how='left')
-else:
-    st.warning("Sex entry missing")
 
-#Model
-if 'TBI Model' in df.columns:
-    tbi_model_counts = df.groupby('TBI Model Type')['TBI Model'].nunique().reset_index()
-    tbi_model_counts.rename(columns={'TBI Model': 'Investigator Named TBI Model Count'}, inplace=True)
-    general_summary = pd.merge(general_summary, tbi_model_counts, on='TBI Model Type', how='left')
-else:
-    st.warning("TBI Model entry missing")
+
+general_summary = summarize_column(df, 'TBI Model Type', col_gensum)
 
 st.write(general_summary)
 
+
 #Missing data analysis - all 
 
-df_filt.replace(r'^\s*$', regex=True)
+
+df_filt.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 fig,ax = plt.subplots(figsize=(10,5))
 msno.matrix(df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
 
