@@ -80,8 +80,9 @@ general_summary = summarize_column(df, 'TBI Model Type', col_gensum)
 st.write(general_summary)
 
 
+col_mda = ['TBI Model Type','TBI Model', 'Species', 'Strain Type', 'Sex1', 'Age category', 'Age_min(weeks)', 'Age_max(weeks)', 'Weight_min(grams)','Weight_max(grams)', 'Device Name']
 #Missing data analysis - all 
-
+df_filt = df[col_mda]
 
 df_filt.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 fig,ax = plt.subplots(figsize=(10,5))
