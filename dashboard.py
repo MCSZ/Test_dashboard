@@ -54,14 +54,14 @@ else:
     df = df.dropna(subset=required_columns)
 
     # Get unique species
-    species_list = df["metadata:species"].unique()
+    species_list = df["Species"].unique()
 
     # Iterate over each species and plot the distribution of strains
     for species in species_list:
         st.subheader(f"Distribution of strains for species: {species}")
-        species_df = df[df["metadata:species"] == species]
+        species_df = df[df["Species"] == species]
         fig, ax = plt.subplots()
-        sns.countplot(y=species_df["metadata:strain"], order=species_df["metadata:strain"].value_counts().index, ax=ax)
+        sns.countplot(y=species_df["Strain Type"], order=species_df["Strain Type"].value_counts().index, ax=ax)
         ax.set_title(f"Strain Distribution for {species}")
         st.pyplot(fig)
 
