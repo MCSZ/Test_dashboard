@@ -77,8 +77,8 @@ general_summary = pd.merge(general_summary, tbi_model_counts, on='TBI Model Type
 
 st.write(general_summary)
 
-#Missing data analysis - all 
-
+#Missing data analysis - al[
+df_filt = df[["Sex", "Species", "Strain", "TBI Model","Age category", "Age (weeks)", "Weight (grams)", "Device Name")
 df_filt.replace(r'^\s*$', regex=True)
 fig,ax = plt.subplots(figsize=(10,5))
 msno.matrix(df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
@@ -94,9 +94,9 @@ st.pyplot(fig)
 # Age Classification Analysis
 st.subheader("Age and Weight Distribution by Sex and Species")
 fig, ax = plt.subplots(figsize=(10, 6))
-sns.scatterplot(data=df, x='min_weeks', y='min_weight', hue='metadata:sex', style='metadata:species', ax=ax)
+sns.scatterplot(data=df, x='Age_min(weeks)', y='Weight_min(grams)', hue='Sex', style='Species', ax=ax)
 ax.set_xlabel('Age (weeks)')
-ax.set_ylabel('Weight')
+ax.set_ylabel('Weight (grams)')
 st.pyplot(fig)
 
 # Strain Analysis
@@ -112,18 +112,20 @@ st.pyplot(fig)
 # Model Summary
 st.subheader("Model Summary by Age, Weight, Classification, Species, and Strain")
 model_summary = df.groupby('metadata:tbi_model').agg({
-    'min_weeks': ['min', 'max'],
-    'min_weight': ['min', 'max'],
+    'Age_min(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
+    'Age_max(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
+    'Weight_min(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
+    'Weight_min(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
     'metadata:sex': pd.Series.nunique,
     'metadata:species': pd.Series.nunique,
     'metadata:strain': pd.Series.nunique
 }).reset_index()
-model_summary.columns = ['TBI Model', 'Min Age (weeks)', 'Max Age (weeks)', 'Min Weight', 'Max Weight', 'Unique Sex Count', 'Unique Species Count', 'Unique Strain Count']
+model_summary.columns = ['TBI Model', 'Age_min(weeks)', 'Age_max(weeks)', 'Weight_min(grams)', 'Weight_min(grams)', 'Unique Sex Count', 'Unique Species Count', 'Unique Strain Count']
 st.write(model_summary)
 
 # Controlled Cortical Impact Model Analysis
 st.subheader("Controlled Cortical Impact Model: Missing Data Analysis on Injury Parameters")
-cci_df = df[df['metadata:tbi_model_class'] == 'controlled cortical impact model']
+cci_df = df[df['metadata:tbi_model_class'] == 'controlled cortical impact model']]
 injury_params = [
     "metadata:tbi_device:angle (degrees from vertical)",
     "metadata:tbi_device:craniectomy_size",
