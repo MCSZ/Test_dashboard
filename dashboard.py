@@ -44,42 +44,34 @@ for col in categorical_columns:
         sns.countplot(data=df, y="TBI Model Type", hue=col, ax=ax)
         st.pyplot(fig)
 
+# Ensure the DataFrame contains the necessary columns
+required_columns = ["Species", "Strain Type"]
 
+if not all(col in df.columns for col in required_columns):
+    st.error(required_columns)
+else:
+    # Drop rows with missing values in the required columns
+    df = df.dropna(subset=required_columns)
+
+    # Get unique species
+    species_list = df["Species"].unique()
+
+    # Iterate over each species and plot the distribution of strains
+    for species in species_list:
+        st.subheader(f"Distribution of strains for species: {species}")
+        species_df = df[df["Species"] == species]
+        fig, ax = plt.subplots()
+        sns.countplot(y=species_df["Strain Type"], order=species_df["Strain Type"].value_counts().index, ax=ax)
+        ax.set_title(f"Strain Distribution for {species}")
+        st.pyplot(fig)
 
 # General Summary
 st.subheader("General Summary")
 df=df.dropna(subset=['TBI Model Type'])
 
-general_summary = df.groupby('TBI Model Type').agg({
-    'Age (weeks)': ['min', 'max'],
-    'Weight (grams)': ['min', 'max'],
-}).reset_index()
 
-
-
-#Species
-species_counts = df.groupby('TBI Model Type')['Species'].nunique().reset_index()
-species_counts.rename(columns={'Species': 'Unique Species Count'}, inplace=True) 
-
-#Sex
-sex_counts = df.groupby('TBI Model Type')['Sex'].nunique().reset_index()
-sex_counts.rename(columns={'Sex': 'Unique Sex Count'}, inplace=True) 
-
-#Model
-tbi_model_counts = df.groupby('TBI Model Type')['TBI Model'].nunique().reset_index()
-tbi_model_counts.rename(columns={'TBI Model': 'Investigator Named TBI Model Count'}, inplace=True) 
-
-#Merge all counts
-general_summary = pd.merge(general_summary, species_counts, on='TBI Model Type', how='left')
-general_summary = pd.merge(general_summary, sex_counts, on='TBI Model Type', how='left')
-general_summary = pd.merge(general_summary, tbi_model_counts, on='TBI Model Type', how='left')
-                           
-
-st.write(general_summary)
-
-#Missing data analysis - al[
-df_filt = df[["Sex", "Species", "Strain", "TBI Model","Age category", "Age (weeks)", "Weight (grams)", "Device Name")
-df_filt.replace(r'^\s*$', regex=True)
+df_filt = df[["Sex", "Species", "Strain", "TBI Model","Age category", "Age (weeks)", "Weight (grams)", "Device Name"]]
+df_filt.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 fig,ax = plt.subplots(figsize=(10,5))
 msno.matrix(df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
 
