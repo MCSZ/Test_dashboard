@@ -74,6 +74,7 @@ df=df.dropna(subset=['TBI Model Type'])
 col_mda = ['TBI Model Type','TBI Model', 'Species', 'Strain Type', 'Sex1', 'Age category', 'Age_min(weeks)', 'Age_max(weeks)', 'Weight_min(grams)','Weight_max(grams)', 'Device Name']
 #Missing data analysis - all 
 df_filt = df[col_mda]
+st.dataframe(df.head())
 
 df_filt.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 fig,ax = plt.subplots(figsize=(10,5))
