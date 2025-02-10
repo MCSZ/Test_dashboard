@@ -48,7 +48,7 @@ for col in categorical_columns:
 required_columns = ["Species", "Strain Type"]
 
 if not all(col in df.columns for col in required_columns):
-    st.error(f{required_columns})
+    st.error(required_columns)
 else:
     # Drop rows with missing values in the required columns
     df = df.dropna(subset=required_columns)
