@@ -70,35 +70,6 @@ st.subheader("General Summary")
 df=df.dropna(subset=['TBI Model Type'])
 
 #
-col_gensum = ['Age_min(weeks)','Age_max(weeks)','Weight_min(grams)','Weight_max(grams)', 'Species', 'Sex','TBI Model']
-
-
-def summarize_column(df, group_column, col_list):
-    for col in col_list:
-        if col in df.columns:
-            
-            # is numeric,?
-            if pd.api.types.is_numeric_dtype(df[col]):  # Check if the column is already numeric
-                # For numeric columns, get the min and max
-                col_counts = df.groupby(group_column)[col].agg(['min', 'max']).reset_index()
-                col_counts.rename(columns={f'{col}': f'{col} min', f'{col}': f'{col} max'}, inplace=True)
-            else:
-                # text columns, count unique values
-                col_counts = df.groupby(group_column)[col].nunique().reset_index()
-                col_counts.rename(columns={col: f'Unique {col} Count'}, inplace=True)
-            
-            # Merge the result into the general summary
-            general_summary = pd.merge(df[[group_column]].drop_duplicates(), COL_counts, on=group_column, how='left')
-            return general_summary
-        else:
-            raise ValueError(f"{col} does not exist in the DataFrame.")
-
-
-
-general_summary = summarize_column(df, 'TBI Model Type', col_gensum)
-
-st.write(general_summary)
-
 
 col_mda = ['TBI Model Type','TBI Model', 'Species', 'Strain Type', 'Sex1', 'Age category', 'Age_min(weeks)', 'Age_max(weeks)', 'Weight_min(grams)','Weight_max(grams)', 'Device Name']
 #Missing data analysis - all 
