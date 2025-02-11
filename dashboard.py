@@ -112,42 +112,38 @@ st.pyplot(fig)
 
 # Model Summary
 st.subheader("Model Summary by Age, Weight, Classification, Species, and Strain")
-if 'metadata:tbi_model' in df.columns:
-    model_summary = df.groupby('metadata:tbi_model').agg({
-    'Age_min(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
-    'Age_max(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
-    'Weight_min(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
-    'Weight_min(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
-    'metadata:sex': pd.Series.nunique,
-    'metadata:species': pd.Series.nunique,
-    'metadata:strain': pd.Series.nunique
+
+model_summary = df.groupby('TBI Model Type').agg({
+'Age_min(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
+'Age_max(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
+'Weight_min(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
+'Weight_min(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
+'metadata:sex': pd.Series.nunique,
+'metadata:species': pd.Series.nunique,
+'metadata:strain': pd.Series.nunique
 }).reset_index()
 
 
+model_summary.columns = ['TBI Model', 'Age_min(weeks)', 'Age_max(weeks)', 'Weight_min(grams)', 'Weight_min(grams)', 'Unique Sex Count', 'Unique Species Count', 'Unique Strain Count']
 
-    model_summary = df.groupby('metadata:tbi_model').agg({
-        # your aggregation here
-    })
-    model_summary.columns = ['TBI Model', 'Age_min(weeks)', 'Age_max(weeks)', 'Weight_min(grams)', 'Weight_min(grams)', 'Unique Sex Count', 'Unique Species Count', 'Unique Strain Count']
-
-else:
-    print("Column 'metadata:tbi_model' not found")
 
 st.write(model_summary)
 
 
 # Controlled Cortical Impact Model Analysis
 st.subheader("Controlled Cortical Impact Model: Missing Data Analysis on Injury Parameters")
-cci_df = df[df['metadata:tbi_model_class'] == 'controlled cortical impact model']
+cci_df = df[df['TBI Model Type'] == 'controlled cortical impact model']
 injury_params = [
-    "metadata:tbi_device:angle (degrees from vertical)",
-    "metadata:tbi_device:craniectomy_size",
-    "metadata:tbi_device:dural_tears",
-    "metadata:tbi_device:impact_area",
-    "metadata:tbi_device:impact_depth (mm)",
-    "metadata:tbi_device:impact_duration (ms)",
-    "metadata:tbi_device:impact_velocity (m/s)",
-    "metadata:tbi_device:shape"
+    "metadata:tbi_device:company"
+    "Impact Depth (mm)_min",
+    "Impact Depth (mm)_max",
+    "Impact Duration (ms)-min",
+    "Impact Duration (ms)-max",
+    "Impact Velocity (m/s)_min",
+    "Impact Velocity (m/s)_max",
+    "Impactor Tip_min (mm)",
+    "Impactor Tip_max(mm)",
+    "Impactor Shape",
 ]
 fig, ax = plt.subplots(figsize=(10, 5))
 msno.matrix(cci_df[injury_params], ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
@@ -155,10 +151,10 @@ st.pyplot(fig)
 
 #Missing data analysis - CCI
 st.subheader("CCI Model Papers - Missing Data Summary")
-cci_col = ["metadata:tbi_model", "metadata:tbi_model_class", "metadata:tbi_device:type", "metadata:tbi_device", "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)", "metadata:tbi_device:shape"]
+cci_col = ["TBI Model Type", "TBI Model", "metadata:tbi_device:type", "metadata:tbi_device", "Impact Depth (mm)_min","Impact Depth (mm)_max","Impact Duration (ms)-min","Impact Duration (ms)-max","Impact Velocity (m/s)_min","Impact Velocity (m/s)_max","Impactor Tip_min (mm)","Impactor Tip_max(mm)","Impactor Shape"]
 cci_newdf = new_df[cci_col]
 
-cci_df = cci_newdf[cci_newdf["metadata:tbi_model_class"]== "Controlled cortical impact model"]
+cci_df = cci_newdf[cci_newdf["TBI Model Type"]== "Controlled cortical impact model"]
 
 fig,ax = plt.subplots(figsize=(10,5))
 msno.matrix(cci_df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
