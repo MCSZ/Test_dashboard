@@ -73,7 +73,7 @@ df=df.dropna(subset=['TBI Model Type'])
 df_filt = df[["Sex", "Species", "Strain", "TBI Model","Age category", "Age (weeks)", "Weight (grams)", "Device Name"]]
 df_filt.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 fig,ax = plt.subplots(figsize=(10,5))
-msno.matrix(df, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
+msno.matrix(df_filt, ax=ax, fontsize=12, color= (0.93, 0.00, 0.37), sparkline=False)
 
 red_patch = mpatches.Patch(color= (0.93, 0.00, 0.37), label='Data present')
 white_patch = mpatches.Patch(color='white', label='Data absent')
@@ -85,7 +85,7 @@ st.pyplot(fig)
 
 # Age Classification Analysis
 df['Age_min(weeks)'].apply(pd.to_numeric, errors='coerce')
-df['Weight_min(weeks)'].apply(pd.to_numeric, errors='coerce')
+df['Weight_min(grams)'].apply(pd.to_numeric, errors='coerce')
 st.subheader("Age and Weight Distribution by Sex and Species")
 fig, ax = plt.subplots(figsize=(10, 6))
 sns.scatterplot(data=df, x='Age_min(weeks)', y='Weight_min(grams)', hue='Sex', style='Species', ax=ax)
