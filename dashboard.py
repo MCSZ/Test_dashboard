@@ -84,6 +84,8 @@ st.pyplot(fig)
 
 
 # Age Classification Analysis
+df['Age_min(weeks)'].apply(pd.to_numeric, errors='coerce'
+df['Weight_min(weeks)'].apply(pd.to_numeric, errors='coerce'
 st.subheader("Age and Weight Distribution by Sex and Species")
 fig, ax = plt.subplots(figsize=(10, 6))
 sns.scatterplot(data=df, x='Age_min(weeks)', y='Weight_min(grams)', hue='Sex', style='Species', ax=ax)
