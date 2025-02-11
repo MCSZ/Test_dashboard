@@ -194,7 +194,7 @@ sns.scatterplot(data=clustering_df, x='PCA1', y='PCA2', hue='Cluster', style='me
 st.pyplot(fig)
 
 
-feature_columns = ["min_weight", "max_weight", "min_weeks", "max_weeks",  "metadata:tbi_device:angle (degrees from vertical)", "metadata:tbi_device:craniectomy_size", "metadata:tbi_device:dural_tears", "metadata:tbi_device:impact_area", "metadata:tbi_device:impact_depth (mm)", "metadata:tbi_device:impact_duration (ms)", "metadata:tbi_device:impact_velocity (m/s)"]
+feature_columns = ["Sex", "Species", "Strain", "TBI Model","Age category", "Age (weeks)", "Weight (grams)", "Device Name", "metadata:tbi_device:type", "metadata:tbi_device", "Impact Depth (mm)_min","Impact Depth (mm)_max","Impact Duration (ms)-min","Impact Duration (ms)-max","Impact Velocity (m/s)_min","Impact Velocity (m/s)_max","Impactor Tip_min (mm)","Impactor Tip_max(mm)","Impactor Shape"]
 
 
 
