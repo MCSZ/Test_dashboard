@@ -117,7 +117,7 @@ st.write(model_summary)
 
 # Controlled Cortical Impact Model Analysis
 st.subheader("Controlled Cortical Impact Model: Missing Data Analysis on Injury Parameters")
-cci_df = df[df['metadata:tbi_model_class'] == 'controlled cortical impact model']]
+cci_df = df[df['metadata:tbi_model_class'] == 'controlled cortical impact model']
 injury_params = [
     "metadata:tbi_device:angle (degrees from vertical)",
     "metadata:tbi_device:craniectomy_size",
