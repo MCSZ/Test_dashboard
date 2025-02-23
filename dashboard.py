@@ -33,7 +33,8 @@ st.write({
     "Total Rows": len(df),
     "Total Columns": len(df.columns),
     "Missing Values": df.isnull().sum().sum(),
-    "Columns with Missing Values": df.isnull().sum()[df.isnull().sum() > 0].to_dict()
+    "Columns with Missing Values": df.isnull().sum()[df.isnull().sum() > 0].to_dict(),
+    "Column Names": df.columns
 })
     
 #need to add more columns
@@ -112,7 +113,7 @@ st.pyplot(fig)
 
 # Model Summary
 st.subheader("Model Summary by Age, Weight, Classification, Species, and Strain")
-print(df.columns)
+
 
 model_summary = df.groupby('TBI Model Type').agg({
 'Age_min(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
