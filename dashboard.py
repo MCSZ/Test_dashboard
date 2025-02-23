@@ -112,12 +112,13 @@ st.pyplot(fig)
 
 # Model Summary
 st.subheader("Model Summary by Age, Weight, Classification, Species, and Strain")
+print(df.columns)
 
 model_summary = df.groupby('TBI Model Type').agg({
 'Age_min(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
 'Age_max(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
 'Weight_min(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
-'Weight_min(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
+'Weight_max(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
 'metadata:sex': pd.Series.nunique,
 'metadata:species': pd.Series.nunique,
 'metadata:strain': pd.Series.nunique
