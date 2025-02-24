@@ -5,6 +5,8 @@ import streamlit as st
 import missingno as msno
 import matplotlib.patches as mpatches
 import numpy as np
+! pip install streamlit scikit-learn
+from sklearn.preprocessing import StandardScaler
 #from sklearn.cluster import KMeans
 #from sklearn.preprocessing import StandardScaler
 #from sklearn.decomposition import PCA
