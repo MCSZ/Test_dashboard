@@ -154,7 +154,9 @@ numeric_cols = ['Age_min(weeks)', 'Age_max(weeks)', 'Weight (grams)',
        'Impact Velocity (m/s)_max', 'Impactor Tip_min (mm)',
        'Impactor Tip_max(mm)']
 
+fig,ax = plt.subplots(figsize=(10,5))
 msno.heatmap(df)
+st.pyplot(fig)
 
 # count the occurrences of each unique value 
 species_counts = filtered_species["metadata:species"].value_counts()
