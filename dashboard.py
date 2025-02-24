@@ -145,9 +145,7 @@ ax.legend(handles=[red_patch, white_patch],loc='center left', bbox_to_anchor=(1.
 st.pyplot(fig)
 
 
-# Clustering Analysis
-st.subheader("Clustering Analysis")
-# Selected numeric columns for clustering
+# correlations?
 
 numeric_cols = ['Age_min(weeks)', 'Age_max(weeks)', 'Weight (grams)',
        'Weight_min(grams)', 'Weight_max(grams)','Impact Depth (mm)_min',
@@ -155,33 +153,8 @@ numeric_cols = ['Age_min(weeks)', 'Age_max(weeks)', 'Weight (grams)',
        'Impact Duration (ms)-max', 'Impact Velocity (m/s)_min',
        'Impact Velocity (m/s)_max', 'Impactor Tip_min (mm)',
        'Impactor Tip_max(mm)']
-clustering_df = df.dropna(subset=numeric_cols)
-X = clustering_df[numeric_cols]
 
-# Standardize the data
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-# Apply KMeans clustering
-kmeans = KMeans(n_clusters=3, random_state=42)
-clusters = kmeans.fit_predict(X_scaled)
-clustering_df['Cluster'] = clusters
-
-# Visualize clusters using PCA
-pca = PCA(n_components=2)
-pca_components = pca.fit_transform(X_scaled)
-clustering_df['PCA1'] = pca_components[:, 0]
-clustering_df['PCA2'] = pca_components[:, 1]
-
-fig, ax = plt.subplots(figsize=(10, 6))
-sns.scatterplot(data=clustering_df, x='PCA1', y='PCA2', hue='Cluster', style='metadata:species', ax=ax)
-st.pyplot(fig)
-
-
-feature_columns = ["Sex", "Species", "Strain", "TBI Model","Age category", "Age (weeks)", "Weight (grams)", "Device Name", "metadata:tbi_device:type", "metadata:tbi_device", "Impact Depth (mm)_min","Impact Depth (mm)_max","Impact Duration (ms)-min","Impact Duration (ms)-max","Impact Velocity (m/s)_min","Impact Velocity (m/s)_max","Impactor Tip_min (mm)","Impactor Tip_max(mm)","Impactor Shape"]
-
-
-
+msno.heatmap(df)
 
 # count the occurrences of each unique value 
 species_counts = filtered_species["metadata:species"].value_counts()
