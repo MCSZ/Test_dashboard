@@ -150,7 +150,7 @@ numinjury_df = injury_df.apply(pd.to_numeric, errors='coerce')
 numinjury_df = numinjury_df.fillna(0)
 numinjury_df[numinjury_df < 0] = 0  # Optional, depends on your data context
 
-numinjury_df = num_injury_df.loc[:, numinjury_df.nunique() > 1]
+numinjury_df = numinjury_df.loc[:, numinjury_df.nunique() > 1]
 
 # Check if the DataFrame is empty after cleaning
 if numinjury_df.shape[0] == 0:
