@@ -146,8 +146,26 @@ st.pyplot(fig)
 
 # Clustering Analysis
 st.subheader("Clustering Analysis")
-# Select numeric columns for clustering
-numeric_cols = ['min_weeks', 'min_weight']
+# Selected numeric columns for clustering
+['ID', 'Study', 'TBI Model Type', 'TBI Model', 'Species', 'Strain Type',
+       'Strain', 'Sex1', 'Sex2', 'Age category', 'Age (weeks)',
+       'Age_min(weeks)', 'Age_max(weeks)', 'Weight (grams)',
+       'Weight_min(grams)', 'Weight_max(grams)', 'Assessments', 'Device Name',
+       'Device RRID', 'metadata:tbi_device:type', 'Impact Depth (mm)_min',
+       'Impact Depth (mm)_max', 'Impact Duration (ms)-min',
+       'Impact Duration (ms)-max', 'Impact Velocity (m/s)_min',
+       'Impact Velocity (m/s)_max', 'Impactor Tip_min (mm)',
+       'Impactor Tip_max(mm)', 'Impactor Shape', 'Pubmed ID',
+       'Associated Protocols', 'Associated Datasets', 'PMID',
+       'metadata:tbi_device:company', 'metadata:tbi_device:company_geo',
+       'Sex'],
+
+numeric_cols = ['Age_min(weeks)', 'Age_max(weeks)', 'Weight (grams)',
+       'Weight_min(grams)', 'Weight_max(grams)','Impact Depth (mm)_min',
+       'Impact Depth (mm)_max', 'Impact Duration (ms)-min',
+       'Impact Duration (ms)-max', 'Impact Velocity (m/s)_min',
+       'Impact Velocity (m/s)_max', 'Impactor Tip_min (mm)',
+       'Impactor Tip_max(mm)']
 clustering_df = df.dropna(subset=numeric_cols)
 X = clustering_df[numeric_cols]
 
