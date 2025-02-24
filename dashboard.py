@@ -124,44 +124,11 @@ model_summary = df.groupby(['TBI Model Type', 'Species']).agg({
 st.write(model_summary)
 
 
-# Controlled Cortical Impact Model Analysis
-st.subheader("Controlled Cortical Impact Model: Missing Data Analysis on Injury Parameters")
-cci_df = df[df['TBI Model Type'] == 'controlled cortical impact model']
-
-injury_params = [
-    "Impact Depth (mm)_min",
-    "Impact Depth (mm)_max",
-    "Impact Duration (ms)-min",
-    "Impact Duration (ms)-max",
-    "Impact Velocity (m/s)_min",
-    "Impact Velocity (m/s)_max",
-    "Impactor Tip_min (mm)",
-    "Impactor Tip_max(mm)"
-]
-injury_df = cci_df[injury_params]
-
-
-numinjury_df = injury_df.apply(pd.to_numeric, errors='coerce')
-
-numinjury_df = numinjury_df.fillna(0)
-numinjury_df[numinjury_df < 0] = 0  # Optional, depends on your data context
-
-numinjury_df = numinjury_df.loc[:, numinjury_df.nunique() > 1]
-
-# Check if the DataFrame is empty after cleaning
-if numinjury_df.shape[0] == 0:
-    pass
-else:
-    fig, ax = plt.subplots(figsize=(10, 5))
-    msno.matrix(numinjury_df, ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
-
-    st.pyplot(fig)
-
 
 #Missing data analysis - CCI
 st.subheader("CCI Model Papers - Missing Data Summary")
 cci_col = ["TBI Model Type", "TBI Model", "metadata:tbi_device:type", "metadata:tbi_device", "Impact Depth (mm)_min","Impact Depth (mm)_max","Impact Duration (ms)-min","Impact Duration (ms)-max","Impact Velocity (m/s)_min","Impact Velocity (m/s)_max","Impactor Tip_min (mm)","Impactor Tip_max(mm)","Impactor Shape"]
-cci_newdf = new_df[cci_col]
+cci_newdf = df[cci_col]
 
 cci_df = cci_newdf[cci_newdf["TBI Model Type"]== "Controlled cortical impact model"]
 
