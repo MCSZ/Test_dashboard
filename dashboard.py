@@ -159,7 +159,7 @@ msno.heatmap(df)
 st.pyplot(fig)
 
 # count the occurrences of each unique value 
-species_counts = filtered_species["metadata:species"].value_counts()
+species_counts = filtered_species["Species"].value_counts()
 
 
 st.write("Count of different species variations:")
