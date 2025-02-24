@@ -131,6 +131,7 @@ st.write(model_summary)
 # Controlled Cortical Impact Model Analysis
 st.subheader("Controlled Cortical Impact Model: Missing Data Analysis on Injury Parameters")
 cci_df = df[df['TBI Model Type'] == 'controlled cortical impact model']
+
 injury_params = [
     "metadata:tbi_device:company"
     "Impact Depth (mm)_min",
@@ -143,8 +144,10 @@ injury_params = [
     "Impactor Tip_max(mm)",
     "Impactor Shape",
 ]
+injury_df = cci_df[cci_df[injury_params]]
+
 fig, ax = plt.subplots(figsize=(10, 5))
-msno.matrix(cci_df[injury_params], ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
+msno.matrix(injury_df, ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
 st.pyplot(fig)
 
 #Missing data analysis - CCI
