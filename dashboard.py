@@ -145,9 +145,13 @@ injury_params = [
     "Impactor Shape"
 ]
 injury_df = cci_df[injury_params]
+st.write(injury_df.dtypes)
+
+numinjury_df = injury_df.apply(pd.to_numeric, errors='coerce')
+
 
 fig, ax = plt.subplots(figsize=(10, 5))
-msno.matrix(injury_df, ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
+msno.matrix(numinjury_df, ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
 
 st.pyplot(fig)
 
