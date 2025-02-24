@@ -144,15 +144,22 @@ injury_params = [
 ]
 injury_df = cci_df[injury_params]
 
+
 numinjury_df = injury_df.apply(pd.to_numeric, errors='coerce')
 
 numinjury_df = numinjury_df.fillna(0)
-numinjury_df[numinjury_df < 0] = 0  
+numinjury_df[numinjury_df < 0] = 0  # Optional, depends on your data context
 
-fig, ax = plt.subplots(figsize=(10, 5))
-msno.matrix(numinjury_df, ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
+numinjury_df = num_injury_df.loc[:, numinjury_df.nunique() > 1]
 
-st.pyplot(fig)
+# Check if the DataFrame is empty after cleaning
+if numinjury_df.shape[0] == 0:
+    pass
+else:
+    fig, ax = plt.subplots(figsize=(10, 5))
+    msno.matrix(numinjury_df, ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
+
+    st.pyplot(fig)
 
 
 #Missing data analysis - CCI
