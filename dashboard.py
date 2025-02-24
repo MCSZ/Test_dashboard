@@ -127,7 +127,8 @@ st.write(model_summary)
 
 #Missing data analysis - CCI
 st.subheader("CCI Model Papers - Missing Data Summary")
-cci_col = ["TBI Model Type", "TBI Model", "metadata:tbi_device:type", "metadata:tbi_device", "Impact Depth (mm)_min","Impact Depth (mm)_max","Impact Duration (ms)-min","Impact Duration (ms)-max","Impact Velocity (m/s)_min","Impact Velocity (m/s)_max","Impactor Tip_min (mm)","Impactor Tip_max(mm)","Impactor Shape"]
+cci_col = ["TBI Model Type", "TBI Model", "metadata:tbi_device:type", "Device Name", "Impact Depth (mm)_min","Impact Depth (mm)_max","Impact Duration (ms)-min","Impact Duration (ms)-max","Impact Velocity (m/s)_min","Impact Velocity (m/s)_max","Impactor Tip_min (mm)","Impactor Tip_max(mm)","Impactor Shape","metadata:tbi_device:company", "metadata:tbi_device:company_geo"]
+
 cci_newdf = df[cci_col]
 
 cci_df = cci_newdf[cci_newdf["TBI Model Type"]== "Controlled cortical impact model"]
