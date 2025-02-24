@@ -16,7 +16,6 @@ file_path = "ModelCat_paper__020624.xlsx"
 df = pd.read_excel(file_path, sheet_name='Sheet1')
 df['Sex'] = pd.concat([df['Sex1'], df['Sex2']]).reset_index(drop=True)
 
-# Streamlit Dashboard Setup
 st.title("PRECISE-TBI Metadata Dashboard")
 
 # Basic Summary
@@ -25,7 +24,6 @@ categorical_columns =  ["Sex", "Species", "Strain Type", "TBI Model Type", "meta
 
 
 
-# Header
 st.subheader("Summary Preview")
 st.dataframe(df.head())
 
@@ -37,7 +35,7 @@ st.write({
     "Column Names": df.columns
 })
     
-#need to add more columns
+
 for col in categorical_columns:
     if col in df.columns:
         st.subheader(f"Distribution of {col}")
@@ -45,7 +43,6 @@ for col in categorical_columns:
         sns.countplot(data=df, y="TBI Model Type", hue=col, ax=ax)
         st.pyplot(fig)
 
-# Ensure the DataFrame contains the necessary columns
 required_columns = ["Species", "Strain Type"]
 
 if not all(col in df.columns for col in required_columns):
@@ -114,7 +111,7 @@ st.pyplot(fig)
 # Model Summary
 st.subheader("Model Summary by Age, Weight, Classification, Species, and Strain")
 
-model_summary = df.groupby('TBI Model Type', 'Species').agg({
+model_summary = df.groupby(['TBI Model Type', 'Species']).agg({
 'Age_min(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
 'Age_max(weeks)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
 'Weight_min(grams)': lambda x: pd.to_numeric(x, errors='coerce').mean(),
@@ -214,7 +211,7 @@ feature_columns = ["Sex", "Species", "Strain", "TBI Model","Age category", "Age 
 # count the occurrences of each unique value 
 species_counts = filtered_species["metadata:species"].value_counts()
 
-# Display the counts as a table
+
 st.write("Count of different species variations:")
 st.write(species_counts)
 
