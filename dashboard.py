@@ -133,7 +133,6 @@ st.subheader("Controlled Cortical Impact Model: Missing Data Analysis on Injury 
 cci_df = df[df['TBI Model Type'] == 'controlled cortical impact model']
 
 injury_params = [
-    "metadata:tbi_device:company",
     "Impact Depth (mm)_min",
     "Impact Depth (mm)_max",
     "Impact Duration (ms)-min",
@@ -141,11 +140,9 @@ injury_params = [
     "Impact Velocity (m/s)_min",
     "Impact Velocity (m/s)_max",
     "Impactor Tip_min (mm)",
-    "Impactor Tip_max(mm)",
-    "Impactor Shape"
+    "Impactor Tip_max(mm)"
 ]
 injury_df = cci_df[injury_params]
-st.write(injury_df.dtypes)
 
 numinjury_df = injury_df.apply(pd.to_numeric, errors='coerce')
 
