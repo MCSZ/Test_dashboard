@@ -146,11 +146,14 @@ injury_df = cci_df[injury_params]
 
 numinjury_df = injury_df.apply(pd.to_numeric, errors='coerce')
 
+numinjury_df = numinjury_df.fillna(0)
+numinjury_df[numinjury_df < 0] = 0  
 
 fig, ax = plt.subplots(figsize=(10, 5))
 msno.matrix(numinjury_df, ax=ax, fontsize=12, color=(0.93, 0.00, 0.37), sparkline=False)
 
 st.pyplot(fig)
+
 
 #Missing data analysis - CCI
 st.subheader("CCI Model Papers - Missing Data Summary")
